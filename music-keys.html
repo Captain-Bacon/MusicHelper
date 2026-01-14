@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Keys Reference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .key-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .key-button {
+            padding: 10px 18px;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .key-button:hover {
+            background: #ebf5fb;
+            transform: translateY(-1px);
+        }
+
+        .key-button.selected {
+            background: #3498db;
+            color: white;
+        }
+
+        .bulk-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-button {
+            padding: 10px 18px;
+            border: 2px solid #95a5a6;
+            background: white;
+            color: #7f8c8d;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .control-button:hover {
+            background: #ecf0f1;
+            border-color: #7f8c8d;
+        }
+
+        .table-container {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            position: sticky;
+            top: 0;
+        }
+
+        th:first-child {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 16px;
+        }
+
+        td:first-child {
+            font-weight: 700;
+            font-size: 18px;
+            color: #2c3e50;
+            text-align: left;
+            padding-left: 20px;
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .no-selection {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+            font-size: 18px;
+        }
+
+        .note-cell {
+            font-weight: 500;
+        }
+
+        /* Alternating row colors for better readability */
+        tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MAJOR SCALES</h1>
+        <div class="subtitle">IN ALL KEYS</div>
+
+        <div class="controls">
+            <div class="key-selector">
+                <button class="key-button" data-key="C">C</button>
+                <button class="key-button" data-key="C#">C♯</button>
+                <button class="key-button" data-key="D">D</button>
+                <button class="key-button" data-key="D#">D♯</button>
+                <button class="key-button" data-key="E">E</button>
+                <button class="key-button" data-key="F">F</button>
+                <button class="key-button" data-key="F#">F♯</button>
+                <button class="key-button" data-key="G">G</button>
+                <button class="key-button" data-key="G#">G♯</button>
+                <button class="key-button" data-key="A">A</button>
+                <button class="key-button" data-key="A#">A♯</button>
+                <button class="key-button" data-key="B">B</button>
+            </div>
+            <div class="bulk-controls">
+                <button class="control-button" id="selectAll">Select All</button>
+                <button class="control-button" id="clearAll">Clear All</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="scaleTable">
+                <thead>
+                    <tr>
+                        <th>SCALE ROOT</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>7</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="8" class="no-selection">
+                            Select keys above to view their scales
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Major scale data for all 12 keys
+        const scaleData = {
+            'C': ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+            'C#': ['C♯', 'D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B♯'],
+            'D': ['D', 'E', 'F♯', 'G', 'A', 'B', 'C♯'],
+            'D#': ['D♯', 'E♯', 'F𝄪', 'G♯', 'A♯', 'B♯', 'C𝄪'],
+            'E': ['E', 'F♯', 'G♯', 'A', 'B', 'C♯', 'D♯'],
+            'F': ['F', 'G', 'A', 'B♭', 'C', 'D', 'E'],
+            'F#': ['F♯', 'G♯', 'A♯', 'B', 'C♯', 'D♯', 'E♯'],
+            'G': ['G', 'A', 'B', 'C', 'D', 'E', 'F♯'],
+            'G#': ['G♯', 'A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F𝄪'],
+            'A': ['A', 'B', 'C♯', 'D', 'E', 'F♯', 'G♯'],
+            'A#': ['A♯', 'B♯', 'C𝄪', 'D♯', 'E♯', 'F𝄪', 'G𝄪'],
+            'B': ['B', 'C♯', 'D♯', 'E', 'F♯', 'G♯', 'A♯']
+        };
+
+        // Display names (with enharmonic alternatives for some keys)
+        const displayNames = {
+            'C': 'C',
+            'C#': 'C♯ / D♭',
+            'D': 'D',
+            'D#': 'D♯ / E♭',
+            'E': 'E',
+            'F': 'F',
+            'F#': 'F♯ / G♭',
+            'G': 'G',
+            'G#': 'G♯ / A♭',
+            'A': 'A',
+            'A#': 'A♯ / B♭',
+            'B': 'B'
+        };
+
+        let selectedKeys = new Set();
+
+        // Initialize event listeners
+        document.querySelectorAll('.key-button').forEach(button => {
+            button.addEventListener('click', () => toggleKey(button));
+        });
+
+        document.getElementById('selectAll').addEventListener('click', selectAllKeys);
+        document.getElementById('clearAll').addEventListener('click', clearAllKeys);
+
+        function toggleKey(button) {
+            const key = button.dataset.key;
+
+            if (selectedKeys.has(key)) {
+                selectedKeys.delete(key);
+                button.classList.remove('selected');
+            } else {
+                selectedKeys.add(key);
+                button.classList.add('selected');
+            }
+
+            updateTable();
+        }
+
+        function selectAllKeys() {
+            document.querySelectorAll('.key-button').forEach(button => {
+                selectedKeys.add(button.dataset.key);
+                button.classList.add('selected');
+            });
+            updateTable();
+        }
+
+        function clearAllKeys() {
+            selectedKeys.clear();
+            document.querySelectorAll('.key-button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            updateTable();
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('tableBody');
+
+            if (selectedKeys.size === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="no-selection">
+                            Select keys above to view their scales
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Build table rows for selected keys
+            let html = '';
+            const keyOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+            keyOrder.forEach(key => {
+                if (selectedKeys.has(key)) {
+                    const notes = scaleData[key];
+                    html += `
+                        <tr>
+                            <td>${displayNames[key]}</td>
+                            ${notes.map(note => `<td class="note-cell">${note}</td>`).join('')}
+                        </tr>
+                    `;
+                }
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // Initialize table
+        updateTable();
+    </script>
+</body>
+</html>
