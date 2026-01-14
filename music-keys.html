@@ -42,10 +42,88 @@
             font-size: 1.1em;
         }
 
+        .style-controls {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 2px solid #bdc3c7;
+        }
+
+        .style-controls h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+
+        .slider-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .slider-control {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .slider-control label {
+            font-size: 14px;
+            color: #34495e;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .slider-control input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            color: #3498db;
+            font-family: monospace;
+            font-weight: 700;
+        }
+
         .controls {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 20px;
             margin-bottom: 25px;
+        }
+
+        .scale-type-filters {
+            display: flex;
+            gap: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 2px solid #dee2e6;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .scale-type-filters label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .scale-type-filters input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .key-selection-row {
+            display: flex;
+            gap: 15px;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -104,7 +182,6 @@
         }
 
         .table-container {
-            margin-top: 30px;
             overflow-x: auto;
         }
 
@@ -130,15 +207,15 @@
         }
 
         td {
-            padding: 15px;
+            padding: 9px 5px;
             text-align: center;
             border-bottom: 1px solid #ecf0f1;
-            font-size: 16px;
+            font-size: 19px;
         }
 
         td:first-child {
             font-weight: 700;
-            font-size: 18px;
+            font-size: 19px;
             color: #2c3e50;
             text-align: left;
             padding-left: 20px;
@@ -168,31 +245,432 @@
         tbody tr:nth-child(even):hover {
             background: #f0f0f0;
         }
+
+        /* Highlighting styles */
+        .highlight-section {
+            display: flex;
+            gap: 10px;
+            padding: 12px 15px;
+            background: #fef5e7;
+            border-radius: 6px;
+            border: 2px solid #f39c12;
+            align-items: center;
+        }
+
+        .highlight-section-label {
+            font-weight: 600;
+            color: #d68910;
+            font-size: 14px;
+        }
+
+        .highlight-mode-button {
+            padding: 10px 18px;
+            border: 2px solid #e67e22;
+            background: white;
+            color: #e67e22;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .highlight-mode-button:hover {
+            background: #fef5e7;
+        }
+
+        .highlight-mode-button.active {
+            background: #e67e22;
+            color: white;
+        }
+
+        .highlighted-2 {
+            background: #d6eaf8 !important;
+        }
+
+        .highlighted-3 {
+            background: #85c1e9 !important;
+        }
+
+        .highlighted-4 {
+            background: #5dade2 !important;
+        }
+
+        .highlighted-5 {
+            background: #3498db !important;
+            color: white;
+        }
+
+        .highlighted-6plus {
+            background: #2874a6 !important;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Chord tone emphasis */
+        .note-hidden {
+            opacity: 0.15;
+        }
+
+        .note-faded {
+            opacity: 0.35;
+        }
+
+        /* Circle of Fifths */
+        .circle-container {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: none;
+        }
+
+        .circle-container.visible {
+            display: block;
+        }
+
+        .circle-of-fifths {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 3px solid #34495e;
+        }
+
+        .circle-segment {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-origin: center;
+            cursor: pointer;
+        }
+
+        .circle-segment-inner {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #2c3e50;
+            transition: all 0.2s;
+        }
+
+        .circle-segment:hover .circle-segment-inner {
+            background: #ebf5fb;
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .circle-segment.selected-major .circle-segment-inner {
+            background: #3498db;
+            color: white;
+            border-color: #2874a6;
+        }
+
+        .circle-segment.selected-minor .circle-segment-inner {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        .circle-segment.selected-both .circle-segment-inner {
+            background: linear-gradient(135deg, #3498db 50%, #e74c3c 50%);
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .circle-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #ecf0f1;
+            border: 2px solid #95a5a6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #7f8c8d;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .circle-toggle-button {
+            margin-left: auto;
+        }
+
+        /* Accordion styles */
+        .accordion-container {
+            margin-top: 30px;
+        }
+
+        .accordion-item {
+            margin-bottom: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: #34495e;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover {
+            background: #2c3e50;
+        }
+
+        .accordion-header.active {
+            background: #3498db;
+        }
+
+        .accordion-icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: white;
+        }
+
+        .accordion-content.active {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .accordion-body {
+            padding: 20px;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .accordion-body h4 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .accordion-body ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .accordion-body li {
+            margin-bottom: 8px;
+        }
+
+        .accordion-body p {
+            margin-bottom: 12px;
+        }
+
+        .accordion-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .accordion-body th {
+            background: #34495e;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .accordion-body td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+        }
+
+        .accordion-body tr:hover {
+            background: #f8f9fa;
+        }
+
+        .key-selector-dropdown {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        /* Table filtering styles */
+        .table-filter-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .filter-toggle-btn {
+            padding: 8px 16px;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .filter-toggle-btn:hover {
+            background: #ebf5fb;
+        }
+
+        .filter-toggle-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .filter-indicator {
+            font-size: 13px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .accordion-body tbody tr.selected {
+            border-left: 4px solid #3498db;
+        }
+
+        .accordion-body tbody tr input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .accordion-body tbody tr.filtered-hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>MAJOR SCALES</h1>
-        <div class="subtitle">IN ALL KEYS</div>
+        <h1>MUSIC SCALES REFERENCE</h1>
+        <div class="subtitle">COMPARE SCALES ACROSS KEYS</div>
+
+        <div class="style-controls">
+            <h3>🎨 Layout Controls</h3>
+            <div class="slider-group">
+                <div class="slider-control">
+                    <label>
+                        Cell Padding (Horizontal)
+                        <span class="slider-value" id="cellPaddingHValue">5px</span>
+                    </label>
+                    <input type="range" id="cellPaddingH" min="5" max="40" value="5" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label>
+                        Cell Padding (Vertical)
+                        <span class="slider-value" id="cellPaddingVValue">9px</span>
+                    </label>
+                    <input type="range" id="cellPaddingV" min="5" max="40" value="9" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label>
+                        Header Font Size
+                        <span class="slider-value" id="headerFontValue">16px</span>
+                    </label>
+                    <input type="range" id="headerFont" min="12" max="24" value="16" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label>
+                        Note Cell Font Size
+                        <span class="slider-value" id="noteFontValue">19px</span>
+                    </label>
+                    <input type="range" id="noteFont" min="12" max="28" value="19" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label>
+                        Row Label Font Size
+                        <span class="slider-value" id="rowLabelFontValue">19px</span>
+                    </label>
+                    <input type="range" id="rowLabelFont" min="14" max="32" value="19" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label>
+                        First Column Padding Left
+                        <span class="slider-value" id="firstColPaddingValue">20px</span>
+                    </label>
+                    <input type="range" id="firstColPadding" min="10" max="50" value="20" step="1">
+                </div>
+
+                <div class="slider-control">
+                    <label>
+                        Table Max Width
+                        <span class="slider-value" id="containerWidthValue">650px</span>
+                    </label>
+                    <input type="range" id="containerWidth" min="400" max="1400" value="650" step="50">
+                </div>
+            </div>
+        </div>
 
         <div class="controls">
-            <div class="key-selector">
-                <button class="key-button" data-key="C">C</button>
-                <button class="key-button" data-key="C#">C♯</button>
-                <button class="key-button" data-key="D">D</button>
-                <button class="key-button" data-key="D#">D♯</button>
-                <button class="key-button" data-key="E">E</button>
-                <button class="key-button" data-key="F">F</button>
-                <button class="key-button" data-key="F#">F♯</button>
-                <button class="key-button" data-key="G">G</button>
-                <button class="key-button" data-key="G#">G♯</button>
-                <button class="key-button" data-key="A">A</button>
-                <button class="key-button" data-key="A#">A♯</button>
-                <button class="key-button" data-key="B">B</button>
+            <div class="scale-type-filters">
+                <strong>Scale Types:</strong>
+                <label>
+                    <input type="checkbox" id="filterMajor" value="major" checked>
+                    Major
+                </label>
+                <label>
+                    <input type="checkbox" id="filterMinor" value="minor" checked>
+                    Minor
+                </label>
             </div>
-            <div class="bulk-controls">
-                <button class="control-button" id="selectAll">Select All</button>
-                <button class="control-button" id="clearAll">Clear All</button>
+
+            <div class="key-selection-row">
+                <div class="key-selector" id="keySelector">
+                    <!-- Buttons generated by JavaScript -->
+                </div>
+                <div class="bulk-controls">
+                    <button class="control-button" id="selectAll">Select All</button>
+                    <button class="control-button" id="clearAll">Clear All</button>
+                </div>
+            </div>
+
+            <div class="highlight-section">
+                <span class="highlight-section-label">Display Mode:</span>
+                <button class="highlight-mode-button" id="highlightToggle">Highlight: Off</button>
+                <button class="highlight-mode-button" id="chordToneToggle">Chord Tones Only: Off</button>
+                <button class="highlight-mode-button circle-toggle-button" id="circleToggle">Circle of Fifths</button>
             </div>
         </div>
 
@@ -219,116 +697,913 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Accordion Reference Sections -->
+        <div class="accordion-container">
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Landing Progressions (Resolutions)</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p>Common landing (resolution) chord progressions with their harmonic outline and character.</p>
+                        <div class="table-filter-controls">
+                            <label for="landingKeySelector"><strong>Select Key:</strong></label>
+                            <select id="landingKeySelector" class="key-selector-dropdown">
+                            <option value="">Show Formulas Only</option>
+                            <option value="C">C</option>
+                            <option value="Db">D♭</option>
+                            <option value="D">D</option>
+                            <option value="Eb">E♭</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="Gb">G♭</option>
+                            <option value="G">G</option>
+                            <option value="Ab">A♭</option>
+                            <option value="A">A</option>
+                            <option value="Bb">B♭</option>
+                            <option value="B">B</option>
+                        </select>
+                            <button class="filter-toggle-btn" id="landingFilterBtn" style="display: none;">Show Selected Only (0)</button>
+                            <span class="filter-indicator" id="landingFilterIndicator" style="display: none;"></span>
+                        </div>
+                        <table id="landingProgressionsTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"></th>
+                                    <th>Progression</th>
+                                    <th>Example Chords</th>
+                                    <th>Voicing/Style</th>
+                                    <th>Character / Usage</th>
+                                </tr>
+                            </thead>
+                            <tbody id="landingProgressionsBody">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Key Transitions (Where to Go)</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <p>Common transitions between keys with suggested chord progressions.</p>
+                        <div class="table-filter-controls">
+                            <button class="filter-toggle-btn" id="transitionsFilterBtn" style="display: none;">Show Selected Only (0)</button>
+                            <span class="filter-indicator" id="transitionsFilterIndicator" style="display: none;"></span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"></th>
+                                    <th>From → To</th>
+                                    <th>Relationship</th>
+                                    <th>Suggested Transition</th>
+                                </tr>
+                            </thead>
+                            <tbody id="keyTransitionsBody">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Circle of Fifths Overlay -->
+    <div class="circle-container" id="circleContainer">
+        <div class="circle-of-fifths" id="circleOfFifths">
+            <div class="circle-center">Circle<br>of<br>Fifths</div>
+        </div>
     </div>
 
     <script>
-        // Major scale data for all 12 keys
+        // Scale data organized by type and key
         const scaleData = {
-            'C': ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
-            'C#': ['C♯', 'D♯', 'E♯', 'F♯', 'G♯', 'A♯', 'B♯'],
-            'D': ['D', 'E', 'F♯', 'G', 'A', 'B', 'C♯'],
-            'D#': ['D♯', 'E♯', 'F𝄪', 'G♯', 'A♯', 'B♯', 'C𝄪'],
-            'E': ['E', 'F♯', 'G♯', 'A', 'B', 'C♯', 'D♯'],
-            'F': ['F', 'G', 'A', 'B♭', 'C', 'D', 'E'],
-            'F#': ['F♯', 'G♯', 'A♯', 'B', 'C♯', 'D♯', 'E♯'],
-            'G': ['G', 'A', 'B', 'C', 'D', 'E', 'F♯'],
-            'G#': ['G♯', 'A♯', 'B♯', 'C♯', 'D♯', 'E♯', 'F𝄪'],
-            'A': ['A', 'B', 'C♯', 'D', 'E', 'F♯', 'G♯'],
-            'A#': ['A♯', 'B♯', 'C𝄪', 'D♯', 'E♯', 'F𝄪', 'G𝄪'],
-            'B': ['B', 'C♯', 'D♯', 'E', 'F♯', 'G♯', 'A♯']
+            major: {
+                'C': ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+                'Db': ['D♭', 'E♭', 'F', 'G♭', 'A♭', 'B♭', 'C'],
+                'D': ['D', 'E', 'F♯', 'G', 'A', 'B', 'C♯'],
+                'Eb': ['E♭', 'F', 'G', 'A♭', 'B♭', 'C', 'D'],
+                'E': ['E', 'F♯', 'G♯', 'A', 'B', 'C♯', 'D♯'],
+                'F': ['F', 'G', 'A', 'B♭', 'C', 'D', 'E'],
+                'Gb': ['G♭', 'A♭', 'B♭', 'C♭', 'D♭', 'E♭', 'F'],
+                'G': ['G', 'A', 'B', 'C', 'D', 'E', 'F♯'],
+                'Ab': ['A♭', 'B♭', 'C', 'D♭', 'E♭', 'F', 'G'],
+                'A': ['A', 'B', 'C♯', 'D', 'E', 'F♯', 'G♯'],
+                'Bb': ['B♭', 'C', 'D', 'E♭', 'F', 'G', 'A'],
+                'B': ['B', 'C♯', 'D♯', 'E', 'F♯', 'G♯', 'A♯']
+            },
+            minor: {
+                'C': ['C', 'D', 'E♭', 'F', 'G', 'A♭', 'B♭'],
+                'Db': ['D♭', 'E♭', 'F♭', 'G♭', 'A♭', 'B𝄫', 'C♭'],
+                'D': ['D', 'E', 'F', 'G', 'A', 'B♭', 'C'],
+                'Eb': ['E♭', 'F', 'G♭', 'A♭', 'B♭', 'C♭', 'D♭'],
+                'E': ['E', 'F♯', 'G', 'A', 'B', 'C', 'D'],
+                'F': ['F', 'G', 'A♭', 'B♭', 'C', 'D♭', 'E♭'],
+                'Gb': ['G♭', 'A♭', 'B𝄫', 'C♭', 'D♭', 'E𝄫', 'F♭'],
+                'G': ['G', 'A', 'B♭', 'C', 'D', 'E♭', 'F'],
+                'Ab': ['A♭', 'B♭', 'C♭', 'D♭', 'E♭', 'F♭', 'G♭'],
+                'A': ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+                'Bb': ['B♭', 'C', 'D♭', 'E♭', 'F', 'G♭', 'A♭'],
+                'B': ['B', 'C♯', 'D', 'E', 'F♯', 'G', 'A']
+            }
         };
 
-        // Display names (with enharmonic alternatives for some keys)
-        const displayNames = {
-            'C': 'C',
-            'C#': 'C♯ / D♭',
-            'D': 'D',
-            'D#': 'D♯ / E♭',
-            'E': 'E',
-            'F': 'F',
-            'F#': 'F♯ / G♭',
-            'G': 'G',
-            'G#': 'G♯ / A♭',
-            'A': 'A',
-            'A#': 'A♯ / B♭',
-            'B': 'B'
+        // Key display names
+        const keyDisplayNames = {
+            'C': 'C', 'Db': 'D♭', 'D': 'D', 'Eb': 'E♭',
+            'E': 'E', 'F': 'F', 'Gb': 'G♭', 'G': 'G',
+            'Ab': 'A♭', 'A': 'A', 'Bb': 'B♭', 'B': 'B'
         };
 
-        let selectedKeys = new Set();
+        // Scale type display names
+        const scaleTypeDisplayNames = {
+            'major': 'Major',
+            'minor': 'Minor'
+        };
+
+        // Chromatic key order
+        const keyOrder = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+
+        // Circle of Fifths order (starting at C, moving clockwise)
+        const circleOfFifthsOrder = ['C', 'G', 'D', 'A', 'E', 'B', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F'];
+
+        let selectedScales = []; // Array of {key, scaleType} objects to maintain selection order
+        let highlightMode = 'off'; // 'off', 'all', '2plus'
+        let chordToneMode = false; // Show only chord tones (1-3-5)
+        let circleVisible = false; // Circle of Fifths visibility
+
+        // Table filtering state
+        let selectedProgressions = new Set(); // Indices of selected landing progressions
+        let selectedTransitions = new Set(); // Indices of selected key transitions
+        let landingFilterActive = false;
+        let transitionsFilterActive = false;
+
+        // Generate buttons based on active scale type filters
+        function generateKeyButtons() {
+            const keySelector = document.getElementById('keySelector');
+            const majorChecked = document.getElementById('filterMajor').checked;
+            const minorChecked = document.getElementById('filterMinor').checked;
+
+            keySelector.innerHTML = '';
+
+            keyOrder.forEach(key => {
+                if (majorChecked) {
+                    const btn = document.createElement('button');
+                    btn.className = 'key-button';
+                    btn.dataset.key = key;
+                    btn.dataset.scaleType = 'major';
+                    btn.textContent = keyDisplayNames[key];
+
+                    // Check if this scale is selected
+                    if (selectedScales.some(s => s.key === key && s.scaleType === 'major')) {
+                        btn.classList.add('selected');
+                    }
+
+                    btn.addEventListener('click', () => toggleScale(key, 'major'));
+                    keySelector.appendChild(btn);
+                }
+
+                if (minorChecked) {
+                    const btn = document.createElement('button');
+                    btn.className = 'key-button';
+                    btn.dataset.key = key;
+                    btn.dataset.scaleType = 'minor';
+                    btn.textContent = keyDisplayNames[key] + 'm';
+
+                    // Check if this scale is selected
+                    if (selectedScales.some(s => s.key === key && s.scaleType === 'minor')) {
+                        btn.classList.add('selected');
+                    }
+
+                    btn.addEventListener('click', () => toggleScale(key, 'minor'));
+                    keySelector.appendChild(btn);
+                }
+            });
+        }
 
         // Initialize event listeners
-        document.querySelectorAll('.key-button').forEach(button => {
-            button.addEventListener('click', () => toggleKey(button));
-        });
-
+        document.getElementById('filterMajor').addEventListener('change', generateKeyButtons);
+        document.getElementById('filterMinor').addEventListener('change', generateKeyButtons);
         document.getElementById('selectAll').addEventListener('click', selectAllKeys);
         document.getElementById('clearAll').addEventListener('click', clearAllKeys);
+        document.getElementById('highlightToggle').addEventListener('click', toggleHighlightMode);
+        document.getElementById('chordToneToggle').addEventListener('click', toggleChordToneMode);
+        document.getElementById('circleToggle').addEventListener('click', toggleCircle);
 
-        function toggleKey(button) {
-            const key = button.dataset.key;
+        // Style control sliders
+        const styleControls = {
+            cellPaddingH: { element: 'td', prop: 'padding-left', suffix: 'px', valueDisplay: 'cellPaddingHValue', also: 'padding-right' },
+            cellPaddingV: { element: 'td', prop: 'padding-top', suffix: 'px', valueDisplay: 'cellPaddingVValue', also: 'padding-bottom' },
+            headerFont: { element: 'th', prop: 'font-size', suffix: 'px', valueDisplay: 'headerFontValue' },
+            noteFont: { element: 'td', prop: 'font-size', suffix: 'px', valueDisplay: 'noteFontValue' },
+            rowLabelFont: { element: 'td:first-child', prop: 'font-size', suffix: 'px', valueDisplay: 'rowLabelFontValue' },
+            firstColPadding: { element: 'td:first-child', prop: 'padding-left', suffix: 'px', valueDisplay: 'firstColPaddingValue', alsoSelector: 'th:first-child' },
+            containerWidth: { element: '.table-container', prop: 'max-width', suffix: 'px', valueDisplay: 'containerWidthValue', additionalProps: { 'margin': '30px auto 0' } }
+        };
 
-            if (selectedKeys.has(key)) {
-                selectedKeys.delete(key);
-                button.classList.remove('selected');
+        // Get or create style element for dynamic updates
+        let dynamicStyle = document.getElementById('dynamic-styles');
+        if (!dynamicStyle) {
+            dynamicStyle = document.createElement('style');
+            dynamicStyle.id = 'dynamic-styles';
+            document.head.appendChild(dynamicStyle);
+        }
+
+        function updateStyle(controlId, value) {
+            const control = styleControls[controlId];
+            const displayElement = document.getElementById(control.valueDisplay);
+            displayElement.textContent = value + control.suffix;
+
+            // Build CSS rule
+            let rules = [];
+
+            if (control.also) {
+                rules.push(`${control.element} { ${control.prop}: ${value}${control.suffix}; ${control.also}: ${value}${control.suffix}; }`);
             } else {
-                selectedKeys.add(key);
-                button.classList.add('selected');
+                rules.push(`${control.element} { ${control.prop}: ${value}${control.suffix}; }`);
+            }
+
+            if (control.alsoSelector) {
+                rules.push(`${control.alsoSelector} { ${control.prop}: ${value}${control.suffix}; }`);
+            }
+
+            // Update or add rules to dynamic stylesheet
+            const ruleText = rules.join('\n');
+            const existingRuleIndex = Array.from(dynamicStyle.sheet.cssRules).findIndex(rule =>
+                rule.selectorText === control.element || (control.alsoSelector && rule.selectorText === control.alsoSelector)
+            );
+
+            // Clear and rebuild all rules
+            while (dynamicStyle.sheet.cssRules.length > 0) {
+                dynamicStyle.sheet.deleteRule(0);
+            }
+
+            // Rebuild all current styles
+            Object.keys(styleControls).forEach(id => {
+                const ctrl = styleControls[id];
+                const slider = document.getElementById(id);
+                const val = slider.value;
+
+                let cssProps = `${ctrl.prop}: ${val}${ctrl.suffix};`;
+                if (ctrl.also) {
+                    cssProps += ` ${ctrl.also}: ${val}${ctrl.suffix};`;
+                }
+                if (ctrl.additionalProps) {
+                    Object.entries(ctrl.additionalProps).forEach(([prop, value]) => {
+                        cssProps += ` ${prop}: ${value};`;
+                    });
+                }
+
+                dynamicStyle.sheet.insertRule(`${ctrl.element} { ${cssProps} }`, dynamicStyle.sheet.cssRules.length);
+
+                if (ctrl.alsoSelector) {
+                    dynamicStyle.sheet.insertRule(`${ctrl.alsoSelector} { ${ctrl.prop}: ${val}${ctrl.suffix}; }`, dynamicStyle.sheet.cssRules.length);
+                }
+            });
+        }
+
+        // Initialize slider listeners
+        Object.keys(styleControls).forEach(controlId => {
+            const slider = document.getElementById(controlId);
+            slider.addEventListener('input', (e) => {
+                updateStyle(controlId, e.target.value);
+            });
+            // Initialize with current value
+            updateStyle(controlId, slider.value);
+        });
+
+        function toggleScale(key, scaleType) {
+            const index = selectedScales.findIndex(s => s.key === key && s.scaleType === scaleType);
+
+            if (index !== -1) {
+                // Remove from array
+                selectedScales.splice(index, 1);
+            } else {
+                // Add to end of array (most recent)
+                selectedScales.push({ key, scaleType });
+            }
+
+            // Regenerate buttons to update selected state
+            generateKeyButtons();
+            updateTable();
+            updateCircle();
+        }
+
+        function selectAllKeys() {
+            // Select all currently visible buttons
+            const majorChecked = document.getElementById('filterMajor').checked;
+            const minorChecked = document.getElementById('filterMinor').checked;
+
+            selectedScales = [];
+            keyOrder.forEach(key => {
+                if (majorChecked) selectedScales.push({ key, scaleType: 'major' });
+                if (minorChecked) selectedScales.push({ key, scaleType: 'minor' });
+            });
+
+            generateKeyButtons();
+            updateTable();
+            updateCircle();
+        }
+
+        function clearAllKeys() {
+            selectedScales = [];
+            generateKeyButtons();
+            updateTable();
+            updateCircle();
+        }
+
+        function toggleHighlightMode() {
+            const modes = ['off', 'all', '2plus'];
+            const labels = {
+                'off': 'Highlight: Off',
+                'all': 'Highlight: Common to ALL',
+                '2plus': 'Highlight: Common to 2+'
+            };
+
+            const currentIndex = modes.indexOf(highlightMode);
+            highlightMode = modes[(currentIndex + 1) % modes.length];
+
+            const button = document.getElementById('highlightToggle');
+            button.textContent = labels[highlightMode];
+
+            if (highlightMode === 'off') {
+                button.classList.remove('active');
+            } else {
+                button.classList.add('active');
             }
 
             updateTable();
         }
 
-        function selectAllKeys() {
-            document.querySelectorAll('.key-button').forEach(button => {
-                selectedKeys.add(button.dataset.key);
-                button.classList.add('selected');
-            });
+        function toggleChordToneMode() {
+            chordToneMode = !chordToneMode;
+
+            const button = document.getElementById('chordToneToggle');
+            button.textContent = chordToneMode ? 'Chord Tones Only: On' : 'Chord Tones Only: Off';
+
+            if (chordToneMode) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+
             updateTable();
         }
 
-        function clearAllKeys() {
-            selectedKeys.clear();
-            document.querySelectorAll('.key-button').forEach(button => {
-                button.classList.remove('selected');
+        // Circle of Fifths functions
+        function toggleCircle() {
+            circleVisible = !circleVisible;
+
+            const container = document.getElementById('circleContainer');
+            const button = document.getElementById('circleToggle');
+
+            if (circleVisible) {
+                container.classList.add('visible');
+                button.classList.add('active');
+            } else {
+                container.classList.remove('visible');
+                button.classList.remove('active');
+            }
+        }
+
+        function renderCircle() {
+            const circle = document.getElementById('circleOfFifths');
+
+            // Clear existing segments (keep center)
+            const existingSegments = circle.querySelectorAll('.circle-segment');
+            existingSegments.forEach(seg => seg.remove());
+
+            // Create 12 segments
+            circleOfFifthsOrder.forEach((key, index) => {
+                const segment = document.createElement('div');
+                segment.className = 'circle-segment';
+                segment.dataset.key = key;
+
+                // Calculate rotation (30 degrees per segment, starting at top)
+                const rotation = (index * 30) - 90; // -90 to start at top
+                segment.style.transform = `rotate(${rotation}deg)`;
+
+                const inner = document.createElement('div');
+                inner.className = 'circle-segment-inner';
+                inner.textContent = keyDisplayNames[key];
+                inner.style.transform = `translateX(-50%) rotate(${-rotation}deg)`; // Counter-rotate text
+
+                segment.appendChild(inner);
+
+                // Check if this key is selected
+                updateCircleSegment(segment, key);
+
+                // Handle clicks
+                segment.addEventListener('click', () => handleCircleClick(key));
+
+                circle.appendChild(segment);
             });
-            updateTable();
+        }
+
+        function updateCircleSegment(segment, key) {
+            const hasMajor = selectedScales.some(s => s.key === key && s.scaleType === 'major');
+            const hasMinor = selectedScales.some(s => s.key === key && s.scaleType === 'minor');
+
+            segment.classList.remove('selected-major', 'selected-minor', 'selected-both');
+
+            if (hasMajor && hasMinor) {
+                segment.classList.add('selected-both');
+            } else if (hasMajor) {
+                segment.classList.add('selected-major');
+            } else if (hasMinor) {
+                segment.classList.add('selected-minor');
+            }
+        }
+
+        function updateCircle() {
+            if (!circleVisible) return;
+
+            // Update all segments
+            circleOfFifthsOrder.forEach(key => {
+                const segment = document.querySelector(`.circle-segment[data-key="${key}"]`);
+                if (segment) {
+                    updateCircleSegment(segment, key);
+                }
+            });
+        }
+
+        function handleCircleClick(key) {
+            const majorChecked = document.getElementById('filterMajor').checked;
+            const minorChecked = document.getElementById('filterMinor').checked;
+
+            // Determine what to toggle based on current state and filters
+            const hasMajor = selectedScales.some(s => s.key === key && s.scaleType === 'major');
+            const hasMinor = selectedScales.some(s => s.key === key && s.scaleType === 'minor');
+
+            if (majorChecked && minorChecked) {
+                // Both filters on: cycle through states
+                if (!hasMajor && !hasMinor) {
+                    // Add major first
+                    toggleScale(key, 'major');
+                } else if (hasMajor && !hasMinor) {
+                    // Add minor too
+                    toggleScale(key, 'minor');
+                } else {
+                    // Remove both
+                    if (hasMajor) toggleScale(key, 'major');
+                    if (hasMinor) toggleScale(key, 'minor');
+                }
+            } else if (majorChecked) {
+                // Only major filter: toggle major
+                toggleScale(key, 'major');
+            } else if (minorChecked) {
+                // Only minor filter: toggle minor
+                toggleScale(key, 'minor');
+            }
+        }
+
+        // Normalize note names to pitch class (0-11) for comparison
+        function noteToPitchClass(note) {
+            const noteMap = {
+                'C': 0, 'B♯': 0,
+                'C♯': 1, 'D♭': 1,
+                'D': 2, 'C𝄪': 2,
+                'D♯': 3, 'E♭': 3,
+                'E': 4, 'F♭': 4, 'D𝄪': 4,
+                'F': 5, 'E♯': 5,
+                'F♯': 6, 'G♭': 6, 'E𝄪': 6,
+                'G': 7, 'F𝄪': 7,
+                'G♯': 8, 'A♭': 8,
+                'A': 9, 'G𝄪': 9,
+                'A♯': 10, 'B♭': 10,
+                'B': 11, 'C♭': 11
+            };
+            return noteMap[note] ?? null;
+        }
+
+        // Analyze common notes across selected scales
+        function analyzeCommonNotes() {
+            if (selectedScales.length < 2 || highlightMode === 'off') {
+                return new Map();
+            }
+
+            // Count occurrences of each pitch class
+            const pitchClassCounts = new Map();
+            const pitchClassToNotes = new Map(); // Track which notes represent each pitch class
+
+            selectedScales.forEach(scale => {
+                const notes = scaleData[scale.scaleType][scale.key];
+                const seenPitchClasses = new Set();
+
+                notes.forEach(note => {
+                    const pitchClass = noteToPitchClass(note);
+                    if (pitchClass !== null && !seenPitchClasses.has(pitchClass)) {
+                        seenPitchClasses.add(pitchClass);
+                        pitchClassCounts.set(pitchClass, (pitchClassCounts.get(pitchClass) || 0) + 1);
+
+                        if (!pitchClassToNotes.has(pitchClass)) {
+                            pitchClassToNotes.set(pitchClass, new Set());
+                        }
+                        pitchClassToNotes.get(pitchClass).add(note);
+                    }
+                });
+            });
+
+            // Filter based on mode
+            const commonNotes = new Map();
+            const minOccurrences = highlightMode === 'all' ? selectedScales.length : 2;
+
+            pitchClassCounts.forEach((count, pitchClass) => {
+                if (count >= minOccurrences) {
+                    const notes = pitchClassToNotes.get(pitchClass);
+                    notes.forEach(note => {
+                        commonNotes.set(note, count);
+                    });
+                }
+            });
+
+            return commonNotes;
         }
 
         function updateTable() {
             const tbody = document.getElementById('tableBody');
 
-            if (selectedKeys.size === 0) {
+            if (selectedScales.length === 0) {
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="no-selection">
-                            Select keys above to view their scales
+                            Select scales above to view their notes
                         </td>
                     </tr>
                 `;
                 return;
             }
 
-            // Build table rows for selected keys
-            let html = '';
-            const keyOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            // Get common notes analysis
+            const commonNotes = analyzeCommonNotes();
 
-            keyOrder.forEach(key => {
-                if (selectedKeys.has(key)) {
-                    const notes = scaleData[key];
-                    html += `
-                        <tr>
-                            <td>${displayNames[key]}</td>
-                            ${notes.map(note => `<td class="note-cell">${note}</td>`).join('')}
-                        </tr>
-                    `;
-                }
+            // Build table rows for selected scales in selection order
+            let html = '';
+
+            selectedScales.forEach(scale => {
+                const notes = scaleData[scale.scaleType][scale.key];
+                const displayName = keyDisplayNames[scale.key];
+                const label = scale.scaleType === 'minor' ? displayName + 'm' : displayName;
+
+                html += `
+                    <tr>
+                        <td>${label}</td>
+                        ${notes.map((note, index) => {
+                            let highlightClass = '';
+                            if (commonNotes.has(note)) {
+                                const count = commonNotes.get(note);
+                                if (count === 2) highlightClass = ' highlighted-2';
+                                else if (count === 3) highlightClass = ' highlighted-3';
+                                else if (count === 4) highlightClass = ' highlighted-4';
+                                else if (count === 5) highlightClass = ' highlighted-5';
+                                else if (count >= 6) highlightClass = ' highlighted-6plus';
+                            }
+
+                            // Apply chord tone emphasis if enabled
+                            let emphasisClass = '';
+                            if (chordToneMode) {
+                                // Indices: 0=root(1), 1=2nd, 2=3rd, 3=4th, 4=5th, 5=6th, 6=7th
+                                if (index === 1 || index === 3 || index === 5) {
+                                    emphasisClass = ' note-hidden'; // Hide 2nd, 4th, 6th
+                                } else if (index === 6) {
+                                    emphasisClass = ' note-faded'; // Fade 7th
+                                }
+                                // Indices 0, 2, 4 (root, 3rd, 5th) remain full opacity
+                            }
+
+                            return `<td class="note-cell${highlightClass}${emphasisClass}">${note}</td>`;
+                        }).join('')}
+                    </tr>
+                `;
             });
 
             tbody.innerHTML = html;
         }
 
-        // Initialize table
+        // Landing Progressions Data
+        const landingProgressions = [
+            { formula: 'V → I', example: 'G → C', voicing: 'Triads', character: 'Straight, clean' },
+            { formula: 'bVII → I', example: 'Bb → C', voicing: 'Triads', character: 'Rocky, anthemic' },
+            { formula: 'bII → I', example: 'Db → C', voicing: 'Substitutions', character: 'Jazzy', note: '(tritone sub)' },
+            { formula: 'IV → V → I', example: 'F → G → C', voicing: 'Triads', character: 'Straight, clean' },
+            { formula: 'ii → V → I', example: 'Dm → G → C', voicing: 'Triads', character: 'Warm, smooth' },
+            { formula: 'bVI → V → I', example: 'Ab → G → C', voicing: 'Triads', character: 'Dramatic, cinematic' },
+            { formula: 'IV → iv → I', example: 'F → Fm → C', voicing: '7ths throughout', character: 'Dramatic, cinematic' },
+            { formula: 'ii → V7 → I', example: 'Dm → G7 → C', voicing: 'Dom. 7th on V', character: 'Warm, smooth' },
+            { formula: 'bVI → V7 → I', example: 'Ab → G7 → C', voicing: 'Dom. 7th on V', character: 'Dramatic, cinematic' },
+            { formula: 'IV → V7 → I', example: 'F → G7 → C', voicing: 'Dom. 7th on V', character: 'Straight, clean' },
+            { formula: 'ii7 → V7 → IMaj7', example: 'Dm7 → G7 → CMaj7', voicing: '7ths throughout', character: 'Jazzy' },
+            { formula: 'bVII → IV → V → I', example: 'Bb → F → G → C', voicing: 'Triads', character: 'Rocky, anthemic' },
+            { formula: '#IVdim7 → V7 → I', example: 'F#dim7 → G7 → C', voicing: 'Substitutions', character: 'Gospel flourish' },
+            { formula: 'iii → vi → ii → V → I', example: 'Em → Am → Dm → G → C', voicing: 'Triads', character: 'Warm, smooth' }
+        ];
+
+        // Key Transitions Data
+        const keyTransitions = [
+            { from: 'D', to: 'A', relationship: 'D is IV of A', transition: 'D → E → A (IV-V-I)' },
+            { from: 'D', to: 'G', relationship: 'D is V of G', transition: 'D → G (V-I)' },
+            { from: 'D', to: 'C', relationship: 'D is II of C', transition: 'D → G → C (chain of Vs)' },
+            { from: 'D', to: 'Bb', relationship: 'D is III of Bb', transition: 'D → F → Bb' },
+            { from: 'D', to: 'B', relationship: 'D is bIII of B', transition: 'D → F# → B' },
+            { from: 'D', to: 'E', relationship: 'D is bVII of E', transition: 'D → E (bVII-I)' },
+            { from: 'A', to: 'D', relationship: 'A is V of D', transition: 'A → D (V-I)' },
+            { from: 'A', to: 'G', relationship: 'A is II of G', transition: 'A → D → G (chain of Vs)' },
+            { from: 'A', to: 'C', relationship: 'A is VI of C', transition: 'A → G → C' },
+            { from: 'A', to: 'Bb', relationship: 'A is VII of Bb', transition: 'A → Bb (semitone up)' },
+            { from: 'A', to: 'B', relationship: 'A is bVII of B', transition: 'A → B (bVII-I)' },
+            { from: 'A', to: 'E', relationship: 'A is IV of E', transition: 'A → B → E (IV-V-I)' },
+            { from: 'G', to: 'D', relationship: 'G is IV of D', transition: 'G → A → D (IV-V-I)' },
+            { from: 'G', to: 'A', relationship: 'G is bVII of A', transition: 'G → A (bVII-I)' },
+            { from: 'G', to: 'C', relationship: 'G is V of C', transition: 'G → C (V-I)' },
+            { from: 'G', to: 'Bb', relationship: 'G is VI of Bb', transition: 'G → F → Bb' },
+            { from: 'G', to: 'B', relationship: 'G is bVI of B', transition: 'G → F# → B (bVI-V-I)' },
+            { from: 'G', to: 'E', relationship: 'G is bIII of E', transition: 'G → B → E' },
+            { from: 'C', to: 'D', relationship: 'C is bVII of D', transition: 'C → D (bVII-I)' },
+            { from: 'C', to: 'A', relationship: 'C is bIII of A', transition: 'C → E → A' },
+            { from: 'C', to: 'G', relationship: 'C is IV of G', transition: 'C → D → G (IV-V-I)' },
+            { from: 'C', to: 'Bb', relationship: 'C is II of Bb', transition: 'C → F → Bb' },
+            { from: 'C', to: 'B', relationship: 'C is bII of B', transition: 'C → B (semitone down)' },
+            { from: 'C', to: 'E', relationship: 'C is bVI of E', transition: 'C → B → E (bVI-V-I)' },
+            { from: 'Bb', to: 'D', relationship: 'Bb is bVI of D', transition: 'Bb → A → D (bVI-V-I)' },
+            { from: 'Bb', to: 'A', relationship: 'Bb is bII of A', transition: 'Bb → A (semitone down)' },
+            { from: 'Bb', to: 'G', relationship: 'Bb is bIII of G', transition: 'Bb → D → G' },
+            { from: 'Bb', to: 'C', relationship: 'Bb is bVII of C', transition: 'Bb → C (bVII-I)' },
+            { from: 'Bb', to: 'B', relationship: 'Bb is bI/VII of B', transition: 'Bb → B (semitone up)' },
+            { from: 'Bb', to: 'E', relationship: 'Bb is bV of E', transition: 'Bb → E (tritone sub!)' },
+            { from: 'B', to: 'D', relationship: 'B is VI of D', transition: 'B → A → D' },
+            { from: 'B', to: 'A', relationship: 'B is II of A', transition: 'B → E → A' },
+            { from: 'B', to: 'G', relationship: 'B is III of G', transition: 'B → D → G' },
+            { from: 'B', to: 'C', relationship: 'B is VII of C', transition: 'B → C (semitone up)' },
+            { from: 'B', to: 'Bb', relationship: 'B is bII of Bb', transition: 'B → Bb (semitone down)' },
+            { from: 'B', to: 'E', relationship: 'B is V of E', transition: 'B → E (V-I)' },
+            { from: 'E', to: 'D', relationship: 'E is II of D', transition: 'E → A → D' },
+            { from: 'E', to: 'A', relationship: 'E is V of A', transition: 'E → A (V-I)' },
+            { from: 'E', to: 'G', relationship: 'E is VI of G', transition: 'E → D → G' },
+            { from: 'E', to: 'C', relationship: 'E is III of C', transition: 'E → G → C' },
+            { from: 'E', to: 'Bb', relationship: 'E is bV of Bb', transition: 'E → Bb (tritone sub!)' },
+            { from: 'E', to: 'B', relationship: 'E is IV of B', transition: 'E → F# → B (IV-V-I)' }
+        ];
+
+        // Roman numeral to chord name conversion
+        function romanToChord(roman, key) {
+            const originalRoman = roman;
+
+            // Major scale intervals from root (semitones)
+            const majorScaleIntervals = [0, 2, 4, 5, 7, 9, 11];
+
+            // Get chromatic notes
+            const chromaticNotes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+            const keyIndex = chromaticNotes.indexOf(key);
+
+            if (keyIndex === -1) return originalRoman;
+
+            // Parse Roman numeral
+            let quality = '';
+            let extension = '';
+            let accidental = 0;
+
+            // Extract accidentals (b or #)
+            if (roman.startsWith('b')) {
+                accidental = -1;
+                roman = roman.slice(1);
+            } else if (roman.startsWith('#')) {
+                accidental = 1;
+                roman = roman.slice(1);
+            }
+
+            // Extract extensions (Maj7, dim7, m7, or just 7)
+            const extensionMatch = roman.match(/(Maj7|dim7|m7|7)$/);
+            if (extensionMatch) {
+                extension = extensionMatch[1];
+                roman = roman.replace(extensionMatch[0], '');
+            }
+
+            // Determine quality based on case
+            const isUpperCase = roman === roman.toUpperCase();
+            const isLowerCase = roman === roman.toLowerCase();
+
+            // Convert Roman numeral to scale degree (0-indexed)
+            const romanMap = {
+                'I': 0, 'i': 0,
+                'II': 1, 'ii': 1,
+                'III': 2, 'iii': 2,
+                'IV': 3, 'iv': 3,
+                'V': 4, 'v': 4,
+                'VI': 5, 'vi': 5,
+                'VII': 6, 'vii': 6
+            };
+
+            const degree = romanMap[roman];
+            if (degree === undefined) return originalRoman; // Return as-is if can't parse
+
+            // Calculate chromatic interval
+            const interval = majorScaleIntervals[degree] + accidental;
+
+            // Get chord root
+            const chordRootIndex = (keyIndex + interval + 12) % 12;
+            const chordRoot = chromaticNotes[chordRootIndex];
+
+            // Determine chord quality
+            if (extension === 'dim7') {
+                quality = 'dim';
+            } else if (isLowerCase && !extension.includes('Maj')) {
+                quality = 'm';
+            }
+
+            return chordRoot + quality + extension;
+        }
+
+        function parseAndConvertProgression(formula, key) {
+            if (!key) return formula;
+
+            // Split by arrows and common separators
+            const parts = formula.split(/\s*[→\/]\s*/);
+            const converted = parts.map(part => {
+                part = part.trim();
+                // Check if it's a Roman numeral pattern
+                if (/^[b#]?[IViv]+(?:7|Maj7|dim7|m7)?$/.test(part)) {
+                    return romanToChord(part, key);
+                }
+                return part;
+            });
+
+            return converted.join(' → ');
+        }
+
+        function populateLandingProgressions(selectedKey = '') {
+            const tbody = document.getElementById('landingProgressionsBody');
+            let html = '';
+
+            landingProgressions.forEach((prog, index) => {
+                const exampleChords = selectedKey ? parseAndConvertProgression(prog.formula, selectedKey) : prog.example;
+                const formulaDisplay = prog.note ? `${prog.formula} ${prog.note}` : prog.formula;
+                const isSelected = selectedProgressions.has(index);
+                const isHidden = landingFilterActive && !isSelected;
+
+                html += `
+                    <tr class="${isSelected ? 'selected' : ''} ${isHidden ? 'filtered-hidden' : ''}" data-index="${index}">
+                        <td><input type="checkbox" class="prog-checkbox" data-index="${index}" ${isSelected ? 'checked' : ''}></td>
+                        <td><strong>${formulaDisplay}</strong></td>
+                        <td>${exampleChords}</td>
+                        <td>${prog.voicing}</td>
+                        <td>${prog.character}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+            // Add checkbox event listeners
+            tbody.querySelectorAll('.prog-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    if (e.target.checked) {
+                        selectedProgressions.add(index);
+                    } else {
+                        selectedProgressions.delete(index);
+                    }
+                    updateLandingFilterUI();
+                    populateLandingProgressions(selectedKey);
+                });
+            });
+
+            updateLandingFilterUI();
+        }
+
+        function updateLandingFilterUI() {
+            const btn = document.getElementById('landingFilterBtn');
+            const indicator = document.getElementById('landingFilterIndicator');
+            const count = selectedProgressions.size;
+
+            if (count > 0) {
+                btn.style.display = 'inline-block';
+                btn.textContent = landingFilterActive
+                    ? `Show All Progressions`
+                    : `Show Selected Only (${count})`;
+                btn.classList.toggle('active', landingFilterActive);
+
+                if (landingFilterActive) {
+                    indicator.style.display = 'inline';
+                    indicator.textContent = `Showing ${count} of ${landingProgressions.length} progressions`;
+                } else {
+                    indicator.style.display = 'none';
+                }
+            } else {
+                btn.style.display = 'none';
+                indicator.style.display = 'none';
+            }
+        }
+
+        function toggleLandingFilter() {
+            landingFilterActive = !landingFilterActive;
+            const selectedKey = document.getElementById('landingKeySelector').value;
+            populateLandingProgressions(selectedKey);
+        }
+
+        function populateKeyTransitions() {
+            const tbody = document.getElementById('keyTransitionsBody');
+            let html = '';
+
+            keyTransitions.forEach((trans, index) => {
+                const isSelected = selectedTransitions.has(index);
+                const isHidden = transitionsFilterActive && !isSelected;
+
+                html += `
+                    <tr class="${isSelected ? 'selected' : ''} ${isHidden ? 'filtered-hidden' : ''}" data-index="${index}">
+                        <td><input type="checkbox" class="trans-checkbox" data-index="${index}" ${isSelected ? 'checked' : ''}></td>
+                        <td><strong>${trans.from} → ${trans.to}</strong></td>
+                        <td>${trans.relationship}</td>
+                        <td>${trans.transition}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+            // Add checkbox event listeners
+            tbody.querySelectorAll('.trans-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    if (e.target.checked) {
+                        selectedTransitions.add(index);
+                    } else {
+                        selectedTransitions.delete(index);
+                    }
+                    updateTransitionsFilterUI();
+                    populateKeyTransitions();
+                });
+            });
+
+            updateTransitionsFilterUI();
+        }
+
+        function updateTransitionsFilterUI() {
+            const btn = document.getElementById('transitionsFilterBtn');
+            const indicator = document.getElementById('transitionsFilterIndicator');
+            const count = selectedTransitions.size;
+
+            if (count > 0) {
+                btn.style.display = 'inline-block';
+                btn.textContent = transitionsFilterActive
+                    ? `Show All Transitions`
+                    : `Show Selected Only (${count})`;
+                btn.classList.toggle('active', transitionsFilterActive);
+
+                if (transitionsFilterActive) {
+                    indicator.style.display = 'inline';
+                    indicator.textContent = `Showing ${count} of ${keyTransitions.length} transitions`;
+                } else {
+                    indicator.style.display = 'none';
+                }
+            } else {
+                btn.style.display = 'none';
+                indicator.style.display = 'none';
+            }
+        }
+
+        function toggleTransitionsFilter() {
+            transitionsFilterActive = !transitionsFilterActive;
+            populateKeyTransitions();
+        }
+
+        // Initialize reference tables
+        populateLandingProgressions();
+        populateKeyTransitions();
+
+        // Handle key selector change
+        document.getElementById('landingKeySelector').addEventListener('change', (e) => {
+            populateLandingProgressions(e.target.value);
+        });
+
+        // Handle filter button clicks
+        document.getElementById('landingFilterBtn').addEventListener('click', toggleLandingFilter);
+        document.getElementById('transitionsFilterBtn').addEventListener('click', toggleTransitionsFilter);
+
+        // Initialize buttons and table
+        generateKeyButtons();
         updateTable();
+        renderCircle();
+
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const isActive = header.classList.contains('active');
+
+                // Toggle active state
+                header.classList.toggle('active');
+                content.classList.toggle('active');
+            });
+        });
     </script>
 </body>
 </html>
