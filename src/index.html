@@ -6,7 +6,7 @@
     <title>Music Keys Reference</title>
 
     <!-- PWA Configuration -->
-    <link rel="manifest" href="../manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#34495e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -228,6 +228,109 @@
                     </div>
                 </div>
             </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Chord Progressions</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <!-- Description & Controls Section -->
+                        <p>Curated chord progressions across styles and difficulties. Click any row to expand musicality notes.</p>
+
+                        <!-- Understanding Notation Section -->
+                        <div class="notation-guide">
+                            <button class="notation-guide-toggle" id="notationGuideToggle">
+                                <span>📚 Understanding Notation</span>
+                                <span class="notation-guide-icon">▼</span>
+                            </button>
+                            <div class="notation-guide-content" id="notationGuideContent">
+                                <h4>Roman Numeral Basics</h4>
+                                <p><strong>Uppercase = Major chords:</strong> I, IV, V (in C: C, F, G)</p>
+                                <p><strong>Lowercase = Minor chords:</strong> ii, iii, vi (in C: Dm, Em, Am)</p>
+
+                                <h4>Secondary/Applied Chords (V7/x)</h4>
+                                <p><strong>V7/IV</strong> = "The dominant 7th <em>of</em> IV" → Build V7 in the key of IV</p>
+                                <p><strong>Example in C:</strong> V7/IV = C7 (V7 in key of F)</p>
+                                <p><strong>V7/vi</strong> = E7 (V7 of Am), <strong>vii°7/V</strong> = F#dim7 (vii°7 of G)</p>
+                                <p><em>Why it works:</em> Creates chromatic notes that pull strongly to target chord</p>
+
+                                <h4>Figured Bass / Inversions</h4>
+                                <p><strong>V6/4</strong> = Second inversion V (5th in bass) → G/D in C</p>
+                                <p><strong>I6</strong> = First inversion I (3rd in bass) → C/E in C</p>
+                                <p><strong>I/III</strong> = Slash chord notation (I with III in bass) → C/E</p>
+                                <p><em>Use:</em> Smooth bass movement, classical cadences</p>
+
+                                <h4>Extensions & Qualities</h4>
+                                <p><strong>7</strong> = dominant 7th (G7 = G-B-D-F)</p>
+                                <p><strong>Maj7 or M7</strong> = major 7th (CMaj7 = C-E-G-B)</p>
+                                <p><strong>m7</strong> = minor 7th (Dm7 = D-F-A-C)</p>
+                                <p><strong>dim7 or °7</strong> = diminished 7th (Bdim7 = B-D-F-Ab)</p>
+                                <p><strong>ø7 or m7b5</strong> = half-diminished 7th (Bm7b5 = B-D-F-A)</p>
+                                <p><strong>°</strong> = diminished triad (Bdim = B-D-F)</p>
+                                <p><strong>sus4</strong> = suspended 4th (Gsus4 = G-C-D, replaces 3rd)</p>
+                                <p><strong>sus2</strong> = suspended 2nd (Gsus2 = G-A-D)</p>
+                                <p><strong>add9</strong> = add 9th without 7th (Cadd9 = C-E-G-D)</p>
+                                <p><strong>9, 11, 13</strong> = extended jazz voicings (includes 7th)</p>
+
+                                <h4>Accidentals</h4>
+                                <p><strong>bIII, bVI, bVII</strong> = Borrowed from parallel minor (C major: Eb, Ab, Bb)</p>
+                                <p><strong>#IV</strong> = Raised 4th (in C: F#)</p>
+                            </div>
+                        </div>
+
+                        <div class="table-filter-controls">
+                            <label for="progressionStyleFilter"><strong>Style:</strong></label>
+                            <select id="progressionStyleFilter" class="key-selector-dropdown">
+                                <!-- Will be populated by JavaScript -->
+                            </select>
+
+                            <label for="progressionDifficultyFilter"><strong>Difficulty:</strong></label>
+                            <select id="progressionDifficultyFilter" class="key-selector-dropdown">
+                                <!-- Will be populated by JavaScript -->
+                            </select>
+
+                            <label for="progressionKeySelector"><strong>Key:</strong></label>
+                            <select id="progressionKeySelector" class="key-selector-dropdown">
+                                <option value="C">C</option>
+                                <option value="Db">D♭</option>
+                                <option value="D">D</option>
+                                <option value="Eb">E♭</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="Gb">G♭</option>
+                                <option value="G">G</option>
+                                <option value="Ab">A♭</option>
+                                <option value="A">A</option>
+                                <option value="Bb">B♭</option>
+                                <option value="B">B</option>
+                            </select>
+
+                            <button class="filter-toggle-btn" id="progressionsFilterBtn" style="display: none;">Show Selected Only (0)</button>
+                            <span class="filter-indicator" id="progressionsFilterIndicator" style="display: none;"></span>
+                        </div>
+
+                        <!-- Chord Progressions Table Section -->
+                        <table id="chordProgressionsTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"></th>
+                                    <th>Formula</th>
+                                    <th>Example (in C)</th>
+                                    <th>Style</th>
+                                    <th>Difficulty</th>
+                                    <th>Character</th>
+                                    <th style="width: 30px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="chordProgressionsBody">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -242,7 +345,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('../service-worker.js')
+                navigator.serviceWorker.register('./service-worker.js')
                     .then(registration => {
                         console.log('Service Worker registered successfully:', registration.scope);
                     })

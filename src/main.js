@@ -1,6 +1,9 @@
 import './styles.css';
 import { scaleData, keyDisplayNames, scaleTypeDisplayNames, keyOrder, circleOfFifthsOrder } from './data/scales.js';
 import { landingProgressions, keyTransitions } from './data/progressions.js';
+import { chordProgressions, styleOptions, difficultyOptions } from './data/chord-progressions.js';
+import { parseAndConvertProgression } from './utils/romanNumeralParser.js';
+import { initializeStyleControls } from './components/styleControls.js';
 
 let selectedScales = []; // Array of {key, scaleType} objects to maintain selection order
 let highlightMode = 'off'; // 'off', 'all', '2plus'
@@ -10,8 +13,11 @@ let circleVisible = false; // Circle of Fifths visibility
 // Table filtering state
 let selectedProgressions = new Set(); // Indices of selected landing progressions
 let selectedTransitions = new Set(); // Indices of selected key transitions
+let selectedChordProgressions = new Set(); // Indices of selected chord progressions
 let landingFilterActive = false;
 let transitionsFilterActive = false;
+let chordProgressionsFilterActive = false;
+let expandedProgressions = new Set(); // Indices of expanded progression rows
 
 // Generate buttons based on active scale type filters
 function generateKeyButtons() {
@@ -64,88 +70,6 @@ document.getElementById('clearAll').addEventListener('click', clearAllKeys);
 document.getElementById('highlightToggle').addEventListener('click', toggleHighlightMode);
 document.getElementById('chordToneToggle').addEventListener('click', toggleChordToneMode);
 document.getElementById('circleToggle').addEventListener('click', toggleCircle);
-
-// Style control sliders
-const styleControls = {
-    cellPaddingH: { element: 'td', prop: 'padding-left', suffix: 'px', valueDisplay: 'cellPaddingHValue', also: 'padding-right' },
-    cellPaddingV: { element: 'td', prop: 'padding-top', suffix: 'px', valueDisplay: 'cellPaddingVValue', also: 'padding-bottom' },
-    headerFont: { element: 'th', prop: 'font-size', suffix: 'px', valueDisplay: 'headerFontValue' },
-    noteFont: { element: 'td', prop: 'font-size', suffix: 'px', valueDisplay: 'noteFontValue' },
-    rowLabelFont: { element: 'td:first-child', prop: 'font-size', suffix: 'px', valueDisplay: 'rowLabelFontValue' },
-    firstColPadding: { element: 'td:first-child', prop: 'padding-left', suffix: 'px', valueDisplay: 'firstColPaddingValue', alsoSelector: 'th:first-child' },
-    containerWidth: { element: '.table-container', prop: 'max-width', suffix: 'px', valueDisplay: 'containerWidthValue', additionalProps: { 'margin': '30px auto 0' } }
-};
-
-// Get or create style element for dynamic updates
-let dynamicStyle = document.getElementById('dynamic-styles');
-if (!dynamicStyle) {
-    dynamicStyle = document.createElement('style');
-    dynamicStyle.id = 'dynamic-styles';
-    document.head.appendChild(dynamicStyle);
-}
-
-function updateStyle(controlId, value) {
-    const control = styleControls[controlId];
-    const displayElement = document.getElementById(control.valueDisplay);
-    displayElement.textContent = value + control.suffix;
-
-    // Build CSS rule
-    let rules = [];
-
-    if (control.also) {
-        rules.push(`${control.element} { ${control.prop}: ${value}${control.suffix}; ${control.also}: ${value}${control.suffix}; }`);
-    } else {
-        rules.push(`${control.element} { ${control.prop}: ${value}${control.suffix}; }`);
-    }
-
-    if (control.alsoSelector) {
-        rules.push(`${control.alsoSelector} { ${control.prop}: ${value}${control.suffix}; }`);
-    }
-
-    // Update or add rules to dynamic stylesheet
-    const ruleText = rules.join('\n');
-    const existingRuleIndex = Array.from(dynamicStyle.sheet.cssRules).findIndex(rule =>
-        rule.selectorText === control.element || (control.alsoSelector && rule.selectorText === control.alsoSelector)
-    );
-
-    // Clear and rebuild all rules
-    while (dynamicStyle.sheet.cssRules.length > 0) {
-        dynamicStyle.sheet.deleteRule(0);
-    }
-
-    // Rebuild all current styles
-    Object.keys(styleControls).forEach(id => {
-        const ctrl = styleControls[id];
-        const slider = document.getElementById(id);
-        const val = slider.value;
-
-        let cssProps = `${ctrl.prop}: ${val}${ctrl.suffix};`;
-        if (ctrl.also) {
-            cssProps += ` ${ctrl.also}: ${val}${ctrl.suffix};`;
-        }
-        if (ctrl.additionalProps) {
-            Object.entries(ctrl.additionalProps).forEach(([prop, value]) => {
-                cssProps += ` ${prop}: ${value};`;
-            });
-        }
-
-        dynamicStyle.sheet.insertRule(`${ctrl.element} { ${cssProps} }`, dynamicStyle.sheet.cssRules.length);
-
-        if (ctrl.alsoSelector) {
-            dynamicStyle.sheet.insertRule(`${ctrl.alsoSelector} { ${ctrl.prop}: ${val}${ctrl.suffix}; }`, dynamicStyle.sheet.cssRules.length);
-        }
-    });
-}
-
-// Initialize slider listeners
-Object.keys(styleControls).forEach(controlId => {
-    const slider = document.getElementById(controlId);
-    slider.addEventListener('input', (e) => {
-        updateStyle(controlId, e.target.value);
-    });
-    // Initialize with current value
-    updateStyle(controlId, slider.value);
-});
 
 function toggleScale(key, scaleType) {
     const index = selectedScales.findIndex(s => s.key === key && s.scaleType === scaleType);
@@ -455,92 +379,6 @@ function updateTable() {
     tbody.innerHTML = html;
 }
 
-// Roman numeral to chord name conversion
-function romanToChord(roman, key) {
-    const originalRoman = roman;
-
-    // Major scale intervals from root (semitones)
-    const majorScaleIntervals = [0, 2, 4, 5, 7, 9, 11];
-
-    // Get chromatic notes
-    const chromaticNotes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
-    const keyIndex = chromaticNotes.indexOf(key);
-
-    if (keyIndex === -1) return originalRoman;
-
-    // Parse Roman numeral
-    let quality = '';
-    let extension = '';
-    let accidental = 0;
-
-    // Extract accidentals (b or #)
-    if (roman.startsWith('b')) {
-        accidental = -1;
-        roman = roman.slice(1);
-    } else if (roman.startsWith('#')) {
-        accidental = 1;
-        roman = roman.slice(1);
-    }
-
-    // Extract extensions (Maj7, dim7, m7, or just 7)
-    const extensionMatch = roman.match(/(Maj7|dim7|m7|7)$/);
-    if (extensionMatch) {
-        extension = extensionMatch[1];
-        roman = roman.replace(extensionMatch[0], '');
-    }
-
-    // Determine quality based on case
-    const isUpperCase = roman === roman.toUpperCase();
-    const isLowerCase = roman === roman.toLowerCase();
-
-    // Convert Roman numeral to scale degree (0-indexed)
-    const romanMap = {
-        'I': 0, 'i': 0,
-        'II': 1, 'ii': 1,
-        'III': 2, 'iii': 2,
-        'IV': 3, 'iv': 3,
-        'V': 4, 'v': 4,
-        'VI': 5, 'vi': 5,
-        'VII': 6, 'vii': 6
-    };
-
-    const degree = romanMap[roman];
-    if (degree === undefined) return originalRoman; // Return as-is if can't parse
-
-    // Calculate chromatic interval
-    const interval = majorScaleIntervals[degree] + accidental;
-
-    // Get chord root
-    const chordRootIndex = (keyIndex + interval + 12) % 12;
-    const chordRoot = chromaticNotes[chordRootIndex];
-
-    // Determine chord quality
-    if (extension === 'dim7') {
-        quality = 'dim';
-    } else if (isLowerCase && !extension.includes('Maj')) {
-        quality = 'm';
-    }
-
-    return chordRoot + quality + extension;
-}
-
-function parseAndConvertProgression(formula, key) {
-    if (!key) return formula;
-
-    // Split by arrows and common separators
-    const parts = formula.split(/\s*[→\/]\s*/);
-    const converted = parts.map(part => {
-        part = part.trim();
-        // Check if it's a Roman numeral pattern
-        if (/^[b#]?[IViv]+(?:7|Maj7|dim7|m7)?$/.test(part)) {
-            return romanToChord(part, key);
-        }
-        return part;
-    });
-
-    return converted.join(' → ');
-}
-
 function populateLandingProgressions(selectedKey = '') {
     const tbody = document.getElementById('landingProgressionsBody');
     let html = '';
@@ -688,14 +526,173 @@ function toggleTransitionsFilter() {
     populateKeyTransitions();
 }
 
+// Chord Progressions Functions
+function populateChordProgressionFilters() {
+    // Populate style filter
+    const styleFilter = document.getElementById('progressionStyleFilter');
+    styleFilter.innerHTML = styleOptions.map(style =>
+        `<option value="${style}">${style}</option>`
+    ).join('');
+
+    // Populate difficulty filter
+    const difficultyFilter = document.getElementById('progressionDifficultyFilter');
+    difficultyFilter.innerHTML = difficultyOptions.map(difficulty =>
+        `<option value="${difficulty}">${difficulty}</option>`
+    ).join('');
+}
+
+function populateChordProgressions() {
+    const tbody = document.getElementById('chordProgressionsBody');
+    const selectedKey = document.getElementById('progressionKeySelector').value;
+    const selectedStyle = document.getElementById('progressionStyleFilter').value;
+    const selectedDifficulty = document.getElementById('progressionDifficultyFilter').value;
+
+    let html = '';
+
+    chordProgressions.forEach((prog, index) => {
+        // Apply filters
+        if (selectedStyle !== 'All' && prog.style !== selectedStyle) return;
+        if (selectedDifficulty !== 'All' && prog.difficulty !== selectedDifficulty) return;
+
+        const exampleChords = parseAndConvertProgression(prog.formula, selectedKey);
+        const isSelected = selectedChordProgressions.has(index);
+        const isExpanded = expandedProgressions.has(index);
+        const isHidden = chordProgressionsFilterActive && !isSelected;
+
+        // Main row
+        html += `
+            <tr class="progression-row ${isSelected ? 'selected' : ''} ${isHidden ? 'filtered-hidden' : ''}" data-index="${index}">
+                <td><input type="checkbox" class="chord-prog-checkbox" data-index="${index}" ${isSelected ? 'checked' : ''}></td>
+                <td>${prog.formula}</td>
+                <td>${exampleChords}</td>
+                <td>${prog.style}</td>
+                <td>${prog.difficulty}</td>
+                <td>${prog.character}</td>
+                <td><span class="expand-icon" data-index="${index}">${isExpanded ? '▲' : '▼'}</span></td>
+            </tr>
+        `;
+
+        // Expandable notes row
+        html += `
+            <tr class="progression-notes-row ${isExpanded ? 'expanded' : ''} ${isHidden ? 'filtered-hidden' : ''}" data-index="${index}">
+                <td colspan="7">
+                    <div class="progression-notes">
+                        <strong>Notes:</strong> ${prog.notes}
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
+
+    // Add checkbox event listeners
+    tbody.querySelectorAll('.chord-prog-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            e.stopPropagation(); // Prevent row click
+            const index = parseInt(e.target.dataset.index);
+            if (e.target.checked) {
+                selectedChordProgressions.add(index);
+            } else {
+                selectedChordProgressions.delete(index);
+            }
+            updateChordProgressionsFilterUI();
+            populateChordProgressions();
+        });
+    });
+
+    // Add row click listeners for expand/collapse
+    tbody.querySelectorAll('.progression-row').forEach(row => {
+        row.addEventListener('click', (e) => {
+            // Don't expand if clicking checkbox
+            if (e.target.type === 'checkbox') return;
+
+            const index = parseInt(row.dataset.index);
+            toggleProgressionExpansion(index);
+        });
+    });
+
+    // Add expand icon click listeners
+    tbody.querySelectorAll('.expand-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = parseInt(icon.dataset.index);
+            toggleProgressionExpansion(index);
+        });
+    });
+
+    updateChordProgressionsFilterUI();
+}
+
+function toggleProgressionExpansion(index) {
+    if (expandedProgressions.has(index)) {
+        expandedProgressions.delete(index);
+    } else {
+        expandedProgressions.add(index);
+    }
+    populateChordProgressions();
+}
+
+function updateChordProgressionsFilterUI() {
+    const btn = document.getElementById('progressionsFilterBtn');
+    const indicator = document.getElementById('progressionsFilterIndicator');
+    const count = selectedChordProgressions.size;
+
+    if (count > 0) {
+        btn.style.display = 'inline-block';
+        btn.textContent = chordProgressionsFilterActive
+            ? `Show All Progressions`
+            : `Show Selected Only (${count})`;
+        btn.classList.toggle('active', chordProgressionsFilterActive);
+
+        if (chordProgressionsFilterActive) {
+            indicator.style.display = 'inline';
+            const visibleCount = chordProgressions.filter((prog, index) => selectedChordProgressions.has(index)).length;
+            indicator.textContent = `Showing ${visibleCount} of ${chordProgressions.length} progressions`;
+        } else {
+            indicator.style.display = 'none';
+        }
+    } else {
+        // Auto-disable filter when no items selected
+        if (chordProgressionsFilterActive) {
+            chordProgressionsFilterActive = false;
+            populateChordProgressions();
+        }
+        btn.style.display = 'none';
+        indicator.style.display = 'none';
+    }
+}
+
+function toggleChordProgressionsFilter() {
+    chordProgressionsFilterActive = !chordProgressionsFilterActive;
+    populateChordProgressions();
+}
+
 // Initialize reference tables
 populateLandingProgressions();
 populateKeyTransitions();
+populateChordProgressionFilters();
+populateChordProgressions();
 
 // Handle key selector change
 document.getElementById('landingKeySelector').addEventListener('change', (e) => {
     populateLandingProgressions(e.target.value);
 });
+
+// Handle chord progressions controls
+document.getElementById('progressionKeySelector').addEventListener('change', () => {
+    populateChordProgressions();
+});
+
+document.getElementById('progressionStyleFilter').addEventListener('change', () => {
+    populateChordProgressions();
+});
+
+document.getElementById('progressionDifficultyFilter').addEventListener('change', () => {
+    populateChordProgressions();
+});
+
+document.getElementById('progressionsFilterBtn').addEventListener('click', toggleChordProgressionsFilter);
 
 // Handle filter button clicks
 document.getElementById('landingFilterBtn').addEventListener('click', toggleLandingFilter);
@@ -705,6 +702,7 @@ document.getElementById('transitionsFilterBtn').addEventListener('click', toggle
 generateKeyButtons();
 updateTable();
 renderCircle();
+initializeStyleControls();
 
 // Accordion functionality
 document.querySelectorAll('.accordion-header').forEach(header => {
@@ -717,3 +715,14 @@ document.querySelectorAll('.accordion-header').forEach(header => {
         content.classList.toggle('active');
     });
 });
+
+// Notation guide toggle
+const notationToggle = document.getElementById('notationGuideToggle');
+const notationContent = document.getElementById('notationGuideContent');
+
+if (notationToggle && notationContent) {
+    notationToggle.addEventListener('click', () => {
+        notationToggle.classList.toggle('active');
+        notationContent.classList.toggle('expanded');
+    });
+}

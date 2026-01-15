@@ -45,3 +45,29 @@ Opens expandable panel showing:
 - Common triads you can build from shared notes
 - Which ones work as pivot points (functional in both keys)
 - Example: "C major → G major: Em, Am, C, G all work as pivots"
+
+## Content to Add (Need Theory Understanding First)
+
+### Mode-to-Chord Mapping
+
+Which mode fits which chord function (e.g., Dorian over ii7, Mixolydian over V7, Lydian over IVMaj7). Referenced in progression notes but requires understanding modes first.
+
+### Common Substitutions Reference
+
+Systematic guide to:
+- Tritone substitutions (bII7 for V7)
+- Relative major/minor swaps
+- Parallel borrowing (modal interchange)
+- Diatonic substitutions (iii for I, vi for I, etc.)
+
+Concepts referenced throughout progressions but not explained standalone.
+
+### Interval Reference
+
+Chart showing interval names, semitone distances, and examples:
+- Perfect 5th (P5) = 7 semitones
+- Major 3rd (M3) = 4 semitones
+- Minor 7th (m7) = 10 semitones
+- etc.
+
+Foundation for understanding chord construction and voice leading.
