@@ -1,6 +1,7 @@
 const CACHE_NAME = 'music-scales-v1';
 const urlsToCache = [
   './',
+  './index.html',
   './manifest.json'
 ];
 
