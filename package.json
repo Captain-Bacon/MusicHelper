@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp manifest.json service-worker.js dist/",
+    "build": "vite build && cp manifest.json service-worker.js dist/ && touch dist/.nojekyll",
     "preview": "vite preview"
   },
   "devDependencies": {
