@@ -78,16 +78,18 @@
             </div>
         </div>
 
-        <!-- Accordion Reference Sections -->
-        <div class="accordion-container">
-            <!-- Scale Comparison Accordion -->
-            <div class="accordion-item">
-                <div class="accordion-header active">
-                    <span>Scale Comparison</span>
-                    <span class="accordion-icon">▼</span>
-                </div>
-                <div class="accordion-content active">
-                    <div class="accordion-body">
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-button active" data-tab="scales">Scales</button>
+            <button class="tab-button" data-tab="progressions">Progressions</button>
+            <button class="tab-button" data-tab="genre">Genre</button>
+            <button class="tab-button" data-tab="theory">Chords & Theory</button>
+        </div>
+
+        <!-- Tab Content Panels -->
+        <div class="tab-content-container">
+            <!-- Scales Tab -->
+            <div class="tab-panel active" id="scales-tab">
                         <!-- Scale Controls Section -->
                         <div class="controls">
                             <div class="scale-type-filters">
@@ -145,16 +147,16 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="accordion-item">
-                <div class="accordion-header">
-                    <span>Landing Progressions (Resolutions)</span>
-                    <span class="accordion-icon">▼</span>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
+            <!-- Progressions Tab -->
+            <div class="tab-panel" id="progressions-tab">
+                <!-- Landing Progressions Section -->
+                <div class="progressions-section">
+                    <h3 class="section-header active">
+                        <span>Landing Progressions (Resolutions)</span>
+                        <span class="section-toggle">▼</span>
+                    </h3>
+                    <div class="section-content active">
                         <!-- Description & Controls Section -->
                         <p>Common landing (resolution) chord progressions with their harmonic outline and character.</p>
                         <div class="table-filter-controls">
@@ -195,15 +197,14 @@
                         </table>
                     </div>
                 </div>
-            </div>
 
-            <div class="accordion-item">
-                <div class="accordion-header">
-                    <span>Key Transitions (Where to Go)</span>
-                    <span class="accordion-icon">▼</span>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
+                <!-- Key Transitions Section -->
+                <div class="progressions-section">
+                    <h3 class="section-header">
+                        <span>Key Transitions (Where to Go)</span>
+                        <span class="section-toggle">▶</span>
+                    </h3>
+                    <div class="section-content">
                         <!-- Description & Controls Section -->
                         <p>Common transitions between keys with suggested chord progressions.</p>
                         <div class="table-filter-controls">
@@ -227,15 +228,14 @@
                         </table>
                     </div>
                 </div>
-            </div>
 
-            <div class="accordion-item">
-                <div class="accordion-header">
-                    <span>Chord Progressions</span>
-                    <span class="accordion-icon">▼</span>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
+                <!-- Chord Progressions Section -->
+                <div class="progressions-section">
+                    <h3 class="section-header">
+                        <span>Chord Progressions</span>
+                        <span class="section-toggle">▶</span>
+                    </h3>
+                    <div class="section-content">
                         <!-- Description & Controls Section -->
                         <p>Curated chord progressions across styles and difficulties. Click any row to expand musicality notes.</p>
 
@@ -329,6 +329,149 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Genre Tab -->
+            <div class="tab-panel" id="genre-tab">
+                <div class="genre-description">
+                    <p>Explore chord progressions organized by musical style and genre. Each category showcases the characteristic harmonic patterns that define the sound of that genre.</p>
+                </div>
+
+                <!-- Genre Sub-tab Navigation -->
+                <div class="genre-tab-navigation">
+                    <button class="genre-tab-button active" data-genre="Pop">Pop</button>
+                    <button class="genre-tab-button" data-genre="Jazz">Jazz</button>
+                    <button class="genre-tab-button" data-genre="Blues">Blues</button>
+                    <button class="genre-tab-button" data-genre="Gospel">Gospel</button>
+                    <button class="genre-tab-button" data-genre="Classical">Classical</button>
+                    <button class="genre-tab-button" data-genre="Rock">Rock</button>
+                    <button class="genre-tab-button" data-genre="Funk">Funk</button>
+                    <button class="genre-tab-button" data-genre="Jazz Fusion">Jazz Fusion</button>
+                    <button class="genre-tab-button" data-genre="Latin Jazz">Latin Jazz</button>
+                    <button class="genre-tab-button" data-genre="Neo-Soul">Neo-Soul</button>
+                    <button class="genre-tab-button" data-genre="Indie">Indie</button>
+                    <button class="genre-tab-button" data-genre="Singer-Songwriter">Singer-Songwriter</button>
+                    <button class="genre-tab-button" data-genre="R&B">R&B</button>
+                    <button class="genre-tab-button" data-genre="Worship">Worship</button>
+                    <button class="genre-tab-button" data-genre="Lo-Fi">Lo-Fi</button>
+                    <button class="genre-tab-button" data-genre="Cinematic">Cinematic</button>
+                </div>
+
+                <!-- Genre Content Area -->
+                <div class="genre-content-area">
+                    <div class="genre-header">
+                        <h3 id="genreTitle">Pop Progressions</h3>
+                        <div class="genre-controls">
+                            <div class="genre-instrument-toggle">
+                                <label><strong>Instrument:</strong></label>
+                                <button class="instrument-toggle-btn active" data-instrument="both">Both</button>
+                                <button class="instrument-toggle-btn" data-instrument="keys">🎹 Keys</button>
+                                <button class="instrument-toggle-btn" data-instrument="guitar">🎸 Guitar</button>
+                            </div>
+                            <div class="genre-key-selector">
+                                <label for="genreKeySelector"><strong>Key:</strong></label>
+                                <select id="genreKeySelector" class="key-selector-dropdown">
+                                    <option value="C">C</option>
+                                    <option value="Db">D♭</option>
+                                    <option value="D">D</option>
+                                    <option value="Eb">E♭</option>
+                                    <option value="E">E</option>
+                                    <option value="F">F</option>
+                                    <option value="Gb">G♭</option>
+                                    <option value="G">G</option>
+                                    <option value="Ab">A♭</option>
+                                    <option value="A">A</option>
+                                    <option value="Bb">B♭</option>
+                                    <option value="B">B</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progressions Section -->
+                    <div class="genre-section">
+                        <h3 class="genre-section-header active">
+                            <span>🎵 Progressions</span>
+                            <span class="section-toggle">▼</span>
+                        </h3>
+                        <div class="genre-section-content active">
+                            <table id="genreProgressionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Formula</th>
+                                        <th>Example Chords</th>
+                                        <th>Difficulty</th>
+                                        <th>Character</th>
+                                        <th style="width: 30px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="genreProgressionsBody">
+                                    <!-- Will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Scales & Theory Section -->
+                    <div class="genre-section">
+                        <h3 class="genre-section-header">
+                            <span>🎹🎸 Essential Theory & Scales</span>
+                            <span class="section-toggle">▶</span>
+                        </h3>
+                        <div class="genre-section-content" id="genreTheoryContent">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Rhythm & Feel Section -->
+                    <div class="genre-section">
+                        <h3 class="genre-section-header">
+                            <span>🥁 Rhythm & Feel</span>
+                            <span class="section-toggle">▶</span>
+                        </h3>
+                        <div class="genre-section-content" id="genreRhythmContent">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Licks & Tricks Section -->
+                    <div class="genre-section">
+                        <h3 class="genre-section-header">
+                            <span>✨ Licks & Tricks</span>
+                            <span class="section-toggle">▶</span>
+                        </h3>
+                        <div class="genre-section-content" id="genreLicksContent">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Practice Resources Section -->
+                    <div class="genre-section">
+                        <h3 class="genre-section-header">
+                            <span>🎧 Practice Resources</span>
+                            <span class="section-toggle">▶</span>
+                        </h3>
+                        <div class="genre-section-content" id="genrePracticeContent">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chords & Theory Tab -->
+            <div class="tab-panel" id="theory-tab">
+                <div class="theory-section">
+                    <h3>Chord Construction</h3>
+                    <p>Reference content coming soon...</p>
+                </div>
+                <div class="theory-section">
+                    <h3>Voice Leading</h3>
+                    <p>Reference content coming soon...</p>
+                </div>
+                <div class="theory-section">
+                    <h3>Rhythm & Groove Patterns</h3>
+                    <p>Reference content coming soon...</p>
                 </div>
             </div>
         </div>

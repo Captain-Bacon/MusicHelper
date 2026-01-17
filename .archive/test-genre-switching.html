@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Genre Switching Test</title>
+    <style>
+        button { padding: 10px; margin: 5px; }
+        .active { background: lightblue; font-weight: bold; }
+        #output { margin-top: 20px; padding: 20px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Genre Switching Test</h1>
+
+    <button class="genre-btn active" data-genre="Blues">Blues</button>
+    <button class="genre-btn" data-genre="Rock">Rock</button>
+    <button class="genre-btn" data-genre="Jazz">Jazz</button>
+
+    <div id="output">
+        <h2 id="genre-title">Blues</h2>
+        <div id="content"></div>
+    </div>
+
+    <script type="module">
+        import { genreContent } from './src/data/genre-content.js';
+
+        let currentGenre = 'Blues';
+
+        // Log the genres to console
+        console.log('Available genres:', Object.keys(genreContent));
+        console.log('Blues overview:', genreContent.Blues?.theory?.overview?.substring(0, 50));
+        console.log('Rock overview:', genreContent.Rock?.theory?.overview?.substring(0, 50));
+
+        function renderGenre() {
+            const genre = genreContent[currentGenre];
+            console.log(`Rendering genre: ${currentGenre}`, genre?.theory?.overview?.substring(0, 100));
+
+            const title = document.getElementById('genre-title');
+            const content = document.getElementById('content');
+
+            title.textContent = currentGenre;
+
+            if (genre && genre.theory && genre.theory.overview) {
+                content.innerHTML = `
+                    <h3>Overview:</h3>
+                    <p>${genre.theory.overview}</p>
+                    <h4>Scales:</h4>
+                    <ul>${genre.theory.scales?.map(s => `<li>${s.name}: ${s.formula}</li>`).join('') || 'None'}</ul>
+                `;
+            } else {
+                content.innerHTML = `<p>No content available for ${currentGenre}</p>`;
+            }
+        }
+
+        // Attach click handlers
+        document.querySelectorAll('.genre-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                currentGenre = button.dataset.genre;
+                console.log('Switched to:', currentGenre);
+
+                // Update active state
+                document.querySelectorAll('.genre-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Render
+                renderGenre();
+            });
+        });
+
+        // Initial render
+        renderGenre();
+    </script>
+</body>
+</html>
